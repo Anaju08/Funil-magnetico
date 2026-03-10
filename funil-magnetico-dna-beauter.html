@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funil Magnético DNA Beauter — As Aulas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bege:#f5ede0;--bege2:#ede0cc;--bege3:#e2d0b8;
+  --rose:#c9897a;--rose-claro:#e8b4a8;--rose-suave:#f5e6e2;
+  --dourado:#b8955a;--dourado-claro:#d4b483;--dourado-brilho:#e2c97e;
+  --marrom:#7a5c3e;--marrom-claro:#a07850;
+  --texto:#3d2b1f;--texto-suave:#6b4c38;--branco:#fdf8f3;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--bege);color:var(--texto);overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bege2);}
+::-webkit-scrollbar-thumb{background:var(--dourado-claro);border-radius:10px;}
+
+/* PROGRESS */
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(to right,var(--rose),var(--dourado));z-index:1001;width:0%;}
+
+/* NAV */
+nav{
+  position:fixed;top:2px;left:0;right:0;z-index:999;
+  display:flex;flex-direction:column;align-items:center;gap:0.3rem;
+  padding:0.65rem 2rem;
+  background:rgba(245,237,224,0.97);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(184,149,90,0.18);
+}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-style:italic;color:var(--rose);}
+.nav-links{display:flex;gap:1.4rem;flex-wrap:wrap;justify-content:center;}
+nav a{font-size:0.56rem;font-weight:400;letter-spacing:0.16em;text-transform:uppercase;color:var(--texto-suave);text-decoration:none;transition:color 0.3s;white-space:nowrap;}
+nav a:hover,nav a.active{color:var(--dourado);}
+
+/* HERO CAPA */
+#capa{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:7rem 2rem 4rem;
+  background:radial-gradient(ellipse 90% 60% at 50% 0%,rgba(201,137,122,0.13) 0%,transparent 65%),var(--bege);
+}
+.capa-tag{font-size:0.62rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--dourado);display:flex;align-items:center;gap:1rem;margin-bottom:2rem;}
+.capa-tag::before,.capa-tag::after{content:'';width:45px;height:1px;background:var(--dourado-claro);}
+.capa-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,6rem);font-weight:300;line-height:1.02;color:var(--texto);margin-bottom:0.7rem;}
+.capa-title em{color:var(--rose);font-style:italic;}
+.capa-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.7rem);font-weight:300;font-style:italic;color:var(--dourado);margin-bottom:2rem;}
+.capa-desc{max-width:520px;font-size:0.88rem;font-weight:300;line-height:2;color:var(--texto-suave);margin-bottom:3rem;}
+.capa-modulos{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:3rem;}
+.capa-mod{padding:0.6rem 1.4rem;border:1px solid var(--bege3);background:var(--branco);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--marrom);text-decoration:none;transition:all 0.3s;}
+.capa-mod:hover{background:var(--rose);color:white;border-color:var(--rose);}
+.scroll-hint{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--dourado-claro);}
+.scroll-hint::after{content:' ↓';}
+
+/* DIVIDER */
+.dv{display:flex;align-items:center;gap:1.5rem;justify-content:center;padding:0.3rem 2rem;}
+.dl{flex:1;max-width:180px;height:1px;background:linear-gradient(to right,transparent,var(--dourado-claro));}
+.dr{flex:1;max-width:180px;height:1px;background:linear-gradient(to left,transparent,var(--dourado-claro));}
+.dd{width:6px;height:6px;background:var(--dourado);transform:rotate(45deg);}
+
+/* SECTION BASE */
+section{padding:5rem 2rem;}
+.si{max-width:900px;margin:0 auto;}
+.mod-header{margin-bottom:3rem;}
+.mod-numero{font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--dourado);margin-bottom:0.5rem;}
+.mod-titulo{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:300;line-height:1.1;color:var(--texto);margin-bottom:1rem;}
+.mod-titulo em{color:var(--rose);font-style:italic;}
+.mod-intro{font-size:0.92rem;font-weight:300;line-height:2;color:var(--texto-suave);max-width:680px;border-left:3px solid var(--rose-claro);padding-left:1.2rem;}
+
+/* AULA BLOCKS */
+.aula{margin-bottom:0.5rem;border:1px solid var(--bege2);background:var(--branco);overflow:hidden;}
+.aula-head{
+  display:flex;align-items:center;gap:1.2rem;padding:1.3rem 1.5rem;
+  cursor:pointer;transition:background 0.25s;user-select:none;
+}
+.aula-head:hover{background:var(--rose-suave);}
+.aula-head.aberta{background:var(--rose-suave);border-left:3px solid var(--rose);}
+.aula-num{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--dourado-claro);line-height:1;min-width:36px;}
+.aula-info{flex:1;}
+.aula-info h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--texto);}
+.aula-info p{font-size:0.72rem;font-weight:300;color:var(--texto-suave);margin-top:0.15rem;letter-spacing:0.05em;}
+.aula-seta{font-size:0.9rem;color:var(--dourado-claro);transition:transform 0.3s;}
+.aula-head.aberta .aula-seta{transform:rotate(180deg);color:var(--rose);}
+
+.aula-corpo{display:none;padding:0 1.8rem 2rem;}
+.aula-corpo.aberta{display:block;}
+
+/* Conteúdo das aulas */
+.aula-texto{font-size:0.88rem;font-weight:300;line-height:2;color:var(--texto-suave);margin:1.2rem 0;}
+.aula-texto strong{color:var(--texto);font-weight:500;}
+.aula-texto em{color:var(--rose);}
+
+.destaque{
+  background:var(--rose-suave);border-left:3px solid var(--rose);
+  padding:1.2rem 1.5rem;margin:1.5rem 0;
+}
+.destaque p{font-size:0.87rem;font-weight:300;line-height:1.9;color:var(--texto);}
+.destaque strong{color:var(--rose-dark,#a86b5c);}
+
+.destaque-dourado{
+  background:linear-gradient(135deg,rgba(212,180,131,0.15),rgba(184,149,90,0.08));
+  border-left:3px solid var(--dourado);
+  padding:1.2rem 1.5rem;margin:1.5rem 0;
+}
+.destaque-dourado p{font-size:0.87rem;font-weight:300;line-height:1.9;color:var(--texto);}
+
+.destaque-marrom{
+  background:rgba(122,92,62,0.06);border-left:3px solid var(--marrom);
+  padding:1.2rem 1.5rem;margin:1.5rem 0;
+}
+.destaque-marrom p{font-size:0.87rem;font-weight:300;line-height:1.9;color:var(--texto);}
+
+.quote-aula{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.1rem,2.2vw,1.5rem);font-style:italic;font-weight:300;
+  color:var(--marrom);text-align:center;padding:1.5rem 2rem;
+  border-top:1px solid var(--bege2);border-bottom:1px solid var(--bege2);
+  margin:2rem 0;line-height:1.6;
+}
+
+.lista-aula{margin:1rem 0 1.5rem;list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
+.lista-aula li{
+  display:flex;align-items:flex-start;gap:0.8rem;
+  font-size:0.85rem;font-weight:300;line-height:1.7;color:var(--texto-suave);
+  padding:0.7rem 1rem;background:var(--bege);
+}
+.lista-aula li::before{content:'◆';color:var(--dourado-claro);font-size:0.4rem;margin-top:0.5rem;flex-shrink:0;}
+.lista-aula li strong{color:var(--texto);font-weight:500;}
+
+.passo-a-passo{margin:1.5rem 0;display:flex;flex-direction:column;gap:3px;}
+.passo{display:flex;gap:1.2rem;padding:1.2rem;background:var(--bege);}
+.passo-n{
+  width:28px;height:28px;background:var(--rose);color:white;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.72rem;font-weight:500;flex-shrink:0;
+}
+.passo-n.gold{background:var(--dourado);}
+.passo-n.brown{background:var(--marrom);}
+.passo-corpo h4{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--rose);margin-bottom:0.3rem;}
+.passo-corpo h4.gold{color:var(--dourado);}
+.passo-corpo h4.brown{color:var(--marrom);}
+.passo-corpo p{font-size:0.83rem;font-weight:300;line-height:1.7;color:var(--texto-suave);}
+
+.dois-cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+.col-card{padding:1.3rem;background:var(--bege);border-top:2px solid var(--rose-claro);}
+.col-card.gold{border-top-color:var(--dourado-claro);}
+.col-card.brown{border-top-color:var(--marrom-claro);}
+.col-card h4{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:0.5rem;}
+.col-card.gold h4{color:var(--dourado);}
+.col-card.brown h4{color:var(--marrom);}
+.col-card p{font-size:0.82rem;font-weight:300;line-height:1.7;color:var(--texto-suave);}
+
+.reflexao{
+  background:var(--marrom);color:white;padding:1.8rem;margin:2rem 0;
+}
+.reflexao h4{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--dourado-brilho);margin-bottom:0.7rem;}
+.reflexao p{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2vw,1.35rem);font-style:italic;font-weight:300;line-height:1.7;opacity:0.95;}
+
+.exemplo-box{
+  border:1px solid var(--bege2);margin:1.5rem 0;overflow:hidden;
+}
+.exemplo-label{background:var(--bege2);padding:0.5rem 1rem;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--marrom);}
+.exemplo-content{padding:1.2rem;background:var(--branco);}
+.exemplo-content p{font-size:0.84rem;font-weight:300;line-height:1.8;color:var(--texto-suave);}
+.exemplo-content p em{color:var(--rose);font-style:normal;font-weight:500;}
+
+.atencao{
+  display:flex;gap:1rem;align-items:flex-start;
+  padding:1.2rem;background:rgba(201,137,122,0.1);
+  border:1px solid var(--rose-claro);margin:1.5rem 0;
+}
+.atencao-ico{font-size:1.3rem;flex-shrink:0;}
+.atencao p{font-size:0.84rem;font-weight:300;line-height:1.8;color:var(--texto);}
+.atencao strong{color:var(--rose);}
+
+/* FUNIL IDÊNTICO */
+#funil-visual{
+  padding:5rem 2rem;text-align:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(201,137,122,0.06) 0%,transparent 70%),var(--bege);
+}
+.funil-wrap{max-width:680px;margin:3.5rem auto 0;}
+.funil-layers{display:flex;flex-direction:column;align-items:center;}
+.f-layer{position:relative;cursor:pointer;transition:filter 0.3s;margin-bottom:4px;width:100%;}
+.f-layer:hover{filter:brightness(1.07);}
+.f-layer-inner{display:flex;align-items:center;justify-content:center;padding:2.5rem 10%;width:100%;}
+.f-top .f-layer-inner{clip-path:polygon(8% 0%,92% 0%,78% 100%,22% 100%);background:linear-gradient(135deg,var(--rose-claro),var(--rose));}
+.f-mid .f-layer-inner{clip-path:polygon(6% 0%,94% 0%,80% 100%,20% 100%);background:linear-gradient(135deg,var(--dourado-claro),var(--dourado));width:80%;margin:0 auto;}
+.f-bot .f-layer-inner{clip-path:polygon(5% 0%,95% 0%,62% 100%,38% 100%);background:linear-gradient(135deg,var(--marrom-claro),var(--marrom));width:60%;margin:0 auto;}
+.f-text h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:white;text-shadow:0 1px 6px rgba(0,0,0,0.15);}
+.f-text p{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.85);}
+.f-hint{font-size:0.56rem;letter-spacing:0.1em;color:rgba(255,255,255,0.6);margin-top:0.2rem;}
+.f-detail{display:none;text-align:left;margin-top:1.2rem;}
+.f-detail.open{display:block;}
+.f-card{background:var(--branco);border:1px solid var(--bege2);border-top:3px solid var(--rose);padding:1.5rem;}
+.f-card.g{border-top-color:var(--dourado);}
+.f-card.m{border-top-color:var(--marrom);}
+.f-card h4{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;color:var(--texto);margin-bottom:0.6rem;}
+.f-card p{font-size:0.83rem;font-weight:300;line-height:1.8;color:var(--texto-suave);}
+
+/* CONCLUSÃO */
+#conclusao{
+  padding:7rem 2rem;text-align:center;
+  background:linear-gradient(180deg,var(--branco) 0%,var(--bege) 100%);
+}
+.conc-inner{max-width:680px;margin:0 auto;}
+.conc-titulo{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:300;color:var(--texto);margin-bottom:1.5rem;}
+.conc-titulo em{color:var(--rose);font-style:italic;}
+.conc-inner p{font-size:0.9rem;font-weight:300;line-height:2.1;color:var(--texto-suave);margin-bottom:1.2rem;}
+.conc-pilares{display:flex;justify-content:center;gap:1rem;margin:2.5rem 0;flex-wrap:wrap;}
+.conc-pilar{display:flex;flex-direction:column;align-items:center;gap:0.4rem;padding:1.3rem 1.5rem;background:var(--bege);border:1px solid var(--bege2);min-width:110px;}
+.conc-pilar .ico{font-size:1.5rem;}
+.conc-pilar span{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--marrom);}
+.frase-final{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.2vw,1.6rem);font-style:italic;font-weight:300;color:var(--rose);margin:2.5rem 0 0.8rem;line-height:1.6;}
+.autor-final{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--dourado);}
+
+/* FOOTER */
+footer{padding:2.5rem 2rem;background:var(--texto);text-align:center;}
+.fb{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--dourado-claro);margin-bottom:0.3rem;}
+footer p{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,237,224,0.35);}
+
+/* REVEAL — fade + leve subida */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* Funil layers — movimento suave ao rolar */
+.f-layer{position:relative;cursor:pointer;transition:filter 0.3s;margin-bottom:4px;width:100%;
+  opacity:0;transform:translateY(18px);transition:opacity 0.5s ease,transform 0.5s ease,filter 0.3s;}
+.f-layer.visible{opacity:1;transform:translateY(0);}
+.f-layer:hover{filter:brightness(1.07);}
+.f-layer-d1{transition-delay:0.1s!important;}
+.f-layer-d2{transition-delay:0.22s!important;}
+.f-layer-d3{transition-delay:0.34s!important;}
+
+@media(max-width:700px){
+  .dois-cols{grid-template-columns:1fr;}
+  #hero{padding:7rem 1.2rem 3rem;}
+  .aula-corpo{padding:0 1rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <span class="nav-brand">DNA Beauter</span>
+  <div class="nav-links">
+    <a href="#capa">Início</a>
+    <a href="#funil-visual">O Funil</a>
+    <a href="#ciclo">O Ciclo</a>
+    <a href="#instagram">Instagram</a>
+    <a href="#whatsapp">WhatsApp</a>
+    <a href="#presencial">Presencial</a>
+    <a href="#conclusao">Conclusão</a>
+  </div>
+</nav>
+
+<!-- ══════════ CAPA ══════════ -->
+<section id="capa">
+  <div class="capa-tag">Método Exclusivo</div>
+  <h1 class="capa-title">Funil <em>Magnético</em><br>DNA Beauter</h1>
+  <p class="capa-sub">A jornada completa da conquista da cliente</p>
+  <p class="capa-desc">Do primeiro clique no Instagram até o encantamento presencial — aprenda a construir uma experiência que fideliza, que indica e que transforma sua profissão em um negócio magnético.</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;font-weight:300;color:var(--marrom);margin-bottom:1.5rem;letter-spacing:0.05em;">por Angela Moraes</p>
+  <div class="capa-modulos">
+    <a href="#ciclo" class="capa-mod">O Ciclo</a>
+    <a href="#instagram" class="capa-mod">Instagram</a>
+    <a href="#whatsapp" class="capa-mod">WhatsApp</a>
+    <a href="#presencial" class="capa-mod">Presencial</a>
+    <a href="#conclusao" class="capa-mod">Conclusão</a>
+  </div>
+  <p class="scroll-hint">comece a aula</p>
+</section>
+
+<div class="dv"><div class="dl"></div><div class="dd"></div><div class="dr"></div></div>
+
+<!-- ══════════ FUNIL VISUAL ══════════ -->
+<section id="funil-visual">
+  <div class="si" style="text-align:center;">
+    <p class="mod-numero reveal">Visão Geral do Método</p>
+    <h2 class="mod-titulo reveal" style="text-align:center;">O Verdadeiro <em>Funil</em> da Beleza</h2>
+    <p style="font-size:0.88rem;font-weight:300;color:var(--texto-suave);max-width:560px;margin:0 auto 0.5rem;line-height:1.9;" class="reveal">Este é o mapa da sua jornada. Clique em cada etapa para entender o que acontece ali — e por que todas as três precisam funcionar juntas.</p>
+    <div class="funil-wrap reveal">
+      <div class="funil-layers">
+        <div class="f-layer f-top f-layer-d1" onclick="toggleFunil('fd-insta')" title="Clique para explorar">
+          <div class="f-layer-inner">
+            <div class="f-text"><h3>Instagram</h3><p>Atração</p><p class="f-hint">clique para ver ↓</p></div>
+          </div>
+        </div>
+        <div id="fd-insta" class="f-detail">
+          <div class="f-card">
+            <h4>📱 Instagram — A Porta de Entrada</h4>
+            <p>É aqui que a cliente te encontra pela primeira vez. Seu perfil, seu conteúdo, sua personalidade online — tudo isso está trabalhando por você 24 horas por dia. O Instagram precisa atrair, encantar e conduzir a cliente ao próximo passo.</p>
+          </div>
+        </div>
+        <div class="f-layer f-mid f-layer-d2" onclick="toggleFunil('fd-wpp')" title="Clique para explorar">
+          <div class="f-layer-inner">
+            <div class="f-text"><h3>WhatsApp</h3><p>Relacionamento</p><p class="f-hint">clique para ver ↓</p></div>
+          </div>
+        </div>
+        <div id="fd-wpp" class="f-detail">
+          <div class="f-card g">
+            <h4>💬 WhatsApp — O Elo Mais Importante</h4>
+            <p>Esta é a etapa mais subestimada — e a mais decisiva. De nada adianta um Instagram impecável se o primeiro contato pelo WhatsApp for frio, demorado ou sem personalidade. Aqui a curiosidade vira confiança. Ou vira abandono.</p>
+          </div>
+        </div>
+        <div class="f-layer f-bot f-layer-d3" onclick="toggleFunil('fd-pres')" title="Clique para explorar">
+          <div class="f-layer-inner">
+            <div class="f-text"><h3>Presencial</h3><p>Encantamento</p><p class="f-hint">clique para ver ↓</p></div>
+          </div>
+        </div>
+        <div id="fd-pres" class="f-detail">
+          <div class="f-card m">
+            <h4>✨ Presencial — Onde a Magia Acontece</h4>
+            <p>A última etapa — e a mais poderosa. Aqui você entrega a promessa que fez online. Técnica de excelência mais experiência emocional completa. Uma cliente encantada não vai embora. Ela volta, indica e fala de você com amor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="dv"><div class="dl"></div><div class="dd"></div><div class="dr"></div></div>
+
+<!-- ══════════ MÓDULO: O CICLO ══════════ -->
+<section id="ciclo" style="background:var(--branco);">
+  <div class="si">
+    <div class="mod-header reveal">
+      <p class="mod-numero">Introdução</p>
+      <h2 class="mod-titulo">O Ciclo da <em>Conquista</em></h2>
+      <p class="mod-intro">Antes de entrar em cada ferramenta, você precisa entender a lógica que conecta tudo. Esse é o fundamento do método — sem ele, você vai aprender técnicas soltas sem saber como encaixá-las.</p>
+    </div>
+
+    <!-- AULA 1 -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">1</div>
+        <div class="aula-info"><h3>O que é o Funil Magnético</h3><p>A lógica por trás do método</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Imagine que você tem uma vitrine na rua mais movimentada da cidade. Pessoas passam, olham, algumas param. Algumas entram. Algumas compram. E algumas voltam toda semana e ainda trazem as amigas.</p>
+        <p class="aula-texto">O Funil Magnético funciona exatamente assim — só que no mundo da beleza, sua vitrine é o <strong>Instagram</strong>, sua porta de entrada é o <strong>WhatsApp</strong>, e sua loja é o <strong>atendimento presencial</strong>.</p>
+        <div class="destaque">
+          <p><strong>A grande sacada do método:</strong> não basta ser boa tecnicamente. Você precisa ser magnética em cada ponto de contato com a sua cliente. Do primeiro post que ela vê até a despedida no atendimento.</p>
+        </div>
+        <p class="aula-texto">A maioria das profissionais de beleza foca só em uma coisa — geralmente a técnica. Mas a cliente que você quer conquistar não está avaliando só o resultado. Ela está avaliando <em>como se sentiu</em> em cada etapa da experiência com você.</p>
+        <div class="reflexao">
+          <h4>Reflita agora</h4>
+          <p>"Em qual das três etapas você sente que está perdendo mais clientes hoje? Seja honesta. É no Instagram, no WhatsApp ou no presencial?"</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA 2 -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">2</div>
+        <div class="aula-info"><h3>As 3 Etapas e Como se Conectam</h3><p>Por que todas precisam funcionar juntas</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Cada etapa do funil prepara o terreno para a próxima. Elas não são independentes — são uma corrente. E corrente quebra pelo elo mais fraco.</p>
+        <div class="passo-a-passo">
+          <div class="passo">
+            <div class="passo-n">1</div>
+            <div class="passo-corpo">
+              <h4>Instagram atrai</h4>
+              <p>A cliente te encontra, passa tempo no seu perfil, assiste seus stories, salva seus posts. Ela ainda não falou com você, mas já está formando uma opinião. Neste momento, você está construindo <strong>percepção de valor</strong>.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">2</div>
+            <div class="passo-corpo">
+              <h4>WhatsApp converte</h4>
+              <p>Ela deu um passo enorme: mandou mensagem. Isso significa que ela já gostou do que viu. Agora é a sua vez de transformar interesse em confiança — e confiança em agendamento. Aqui você constrói <strong>relacionamento</strong>.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">3</div>
+            <div class="passo-corpo">
+              <h4>Presencial encanta</h4>
+              <p>Ela chegou até você. Tudo que você prometeu online agora vai ser testado na realidade. É aqui que você entrega — e vai além. Aqui você constrói <strong>fidelização e indicação</strong>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="atencao">
+          <span class="atencao-ico">⚠️</span>
+          <p><strong>Atenção:</strong> Uma etapa fraca compromete todo o ciclo. Uma cliente encantada pelo Instagram que tem uma experiência ruim no WhatsApp raramente chega ao presencial. E uma que chega ao presencial e sai decepcionada nunca mais volta — e ainda conta para as amigas.</p>
+        </div>
+        <p class="aula-texto">Quando as três etapas funcionam bem, algo incrível acontece: a cliente encantada <em>volta ao início do ciclo</em>. Ela posta, indica, marca suas amigas no seu Instagram — e o ciclo recomeça, agora alimentado por ela.</p>
+        <div class="quote-aula">"Você não precisa só conquistar clientes. Você precisa criar fãs — e fãs trabalham por você gratuitamente."</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="dv"><div class="dl"></div><div class="dd"></div><div class="dr"></div></div>
+
+<!-- ══════════ MÓDULO: INSTAGRAM ══════════ -->
+<section id="instagram" style="background:var(--bege);">
+  <div class="si">
+    <div class="mod-header reveal">
+      <p class="mod-numero">Módulo 01</p>
+      <h2 class="mod-titulo">Instagram <em>com Intenção</em></h2>
+      <p class="mod-intro">O Instagram não é só uma galeria de fotos bonitas. É a sua vitrine, sua voz, sua personalidade e seu vendedor trabalhando 24h por dia. Você vai aprender a usá-lo com estratégia e autenticidade.</p>
+    </div>
+
+    <!-- AULA: PERFIL -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">1</div>
+        <div class="aula-info"><h3>Como Estruturar seu Perfil Passo a Passo</h3><p>A base que tudo precisa ter antes de qualquer conteúdo</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Antes de postar qualquer coisa, seu perfil precisa estar estruturado para converter. Quando uma pessoa chega no seu Instagram, ela decide em menos de 10 segundos se fica ou vai embora. Você precisa ganhar essa batalha antes de ela ver o primeiro post.</p>
+
+        <div class="passo-a-passo">
+          <div class="passo">
+            <div class="passo-n">1</div>
+            <div class="passo-corpo">
+              <h4>Foto de Perfil</h4>
+              <p>Use uma foto sua — de rosto, com boa iluminação, de preferência sorrindo. Perfis de profissionais de beleza sem rosto perdem conexão. Sua cliente quer saber <strong>quem vai cuidar dela</strong>. Mostre-se.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">2</div>
+            <div class="passo-corpo">
+              <h4>Nome e Usuário</h4>
+              <p>Coloque no campo "Nome" (não só no usuário) seu nome + especialidade. Exemplo: <em>Ana Silva | Lash Designer</em>. Isso aparece na busca e ajuda quem te procura a te encontrar.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">3</div>
+            <div class="passo-corpo">
+              <h4>Bio Estratégica</h4>
+              <p>Sua bio precisa responder 3 perguntas em 3 linhas: <strong>O que você faz?</strong> / <strong>Para quem?</strong> / <strong>Por que você?</strong> Termine sempre com uma chamada para ação: "Agende pelo link abaixo" ou "Manda mensagem para agendar".</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">4</div>
+            <div class="passo-corpo">
+              <h4>Link na Bio</h4>
+              <p>Use um link que leva direto para o WhatsApp com mensagem automática já preenchida. Isso reduz o atrito — ela clica, já abre a conversa. Quanto menos esforço ela precisar fazer, maior a chance de entrar em contato.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">5</div>
+            <div class="passo-corpo">
+              <h4>Destaques Estratégicos</h4>
+              <p>Organize seus destaques como um mini-site: <em>Trabalhos / Antes e Depois / Sobre Mim / Depoimentos / FAQ</em>. Sua cliente vai vasculhar esses destaques antes de te chamar. Faça valer cada um.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="destaque-dourado">
+          <p><strong>Dica de ouro:</strong> Peça para uma amiga que não conhece seu trabalho abrir seu perfil e, sem pesquisar, dizer o que você faz, para quem e onde fica em menos de 15 segundos. Se ela não conseguir, sua bio precisa de ajuste.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: O QUE POSTAR -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">2</div>
+        <div class="aula-info"><h3>O que Postar e Por Quê</h3><p>Os tipos de conteúdo que atraem, convencem e convertem</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Existe um erro muito comum entre profissionais de beleza: postar só resultado. Só antes e depois. Isso é importante, mas não é suficiente. Sua cliente quer <strong>confiar em você</strong> antes de agendar — e confiança se constrói com variedade de conteúdo.</p>
+
+        <p class="aula-texto">Pense no seu conteúdo como uma conversa com três objetivos diferentes:</p>
+
+        <div class="dois-cols">
+          <div class="col-card">
+            <h4>Conteúdo de Atração</h4>
+            <p>Faz ela parar o scroll e te seguir. São os <strong>antes e depois</strong>, os bastidores, as curiosidades do seu nicho. Conteúdo que gera identificação e desperta "quero isso para mim".</p>
+          </div>
+          <div class="col-card gold">
+            <h4>Conteúdo de Autoridade</h4>
+            <p>Faz ela confiar que você sabe o que faz. Dicas técnicas, sua opinião profissional, erros comuns a evitar, sua formação. Conteúdo que responde: <strong>"Por que você e não outra?"</strong></p>
+          </div>
+          <div class="col-card brown">
+            <h4>Conteúdo de Conexão</h4>
+            <p>Faz ela se sentir próxima de você. Sua rotina, seus valores, quem você é fora do trabalho. <strong>Pessoas contratam pessoas</strong> — não só portfólios.</p>
+          </div>
+          <div class="col-card" style="border-top-color:var(--rose);">
+            <h4>Conteúdo de Conversão</h4>
+            <p>Faz ela agendar. Depoimentos de clientes, divulgação de horários, promoções com prazo. Não tenha medo de vender — mas faça com contexto e intenção.</p>
+          </div>
+        </div>
+
+        <div class="destaque">
+          <p><strong>Regra prática:</strong> A cada 10 posts, tente ter: 3 de atração, 3 de autoridade, 2 de conexão e 2 de conversão. Esse equilíbrio mantém seu perfil rico, humano e estratégico ao mesmo tempo.</p>
+        </div>
+
+        <div class="reflexao">
+          <h4>Exercício prático</h4>
+          <p>"Abra seu Instagram agora e conte quantos posts são de cada tipo nos últimos 9. O que está faltando no seu mix de conteúdo?"</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: LEGENDAS -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">3</div>
+        <div class="aula-info"><h3>Como Criar Legendas que Convertem</h3><p>O texto que transforma espectador em cliente</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">A imagem para o scroll. A legenda faz a cliente agir. Uma foto linda com uma legenda genérica é uma oportunidade perdida. Você não precisa escrever muito — precisa escrever <strong>com intenção</strong>.</p>
+
+        <div class="passo-a-passo">
+          <div class="passo">
+            <div class="passo-n">1</div>
+            <div class="passo-corpo">
+              <h4>Comece com uma frase que prende</h4>
+              <p>A primeira linha aparece sem a cliente clicar em "ver mais". Ela precisa ser forte. Use uma pergunta, uma afirmação surpreendente ou uma história. <em>Evite começar com o nome do serviço ou "Trabalho lindo!"</em></p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">2</div>
+            <div class="passo-corpo">
+              <h4>Conte uma história ou entregue valor</h4>
+              <p>No meio da legenda, desenvolva. Pode ser a história da cliente (com permissão e sem expor), uma dica relacionada ao serviço, uma reflexão sobre autoestima. Faça ela sentir algo.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">3</div>
+            <div class="passo-corpo">
+              <h4>Termine com uma chamada para ação</h4>
+              <p>Sempre. "Manda mensagem para agendar", "Salva esse post para lembrar", "Me conta nos comentários". Diga exatamente o que você quer que ela faça. Sem CTA, ela simplesmente continua rolando o feed.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="exemplo-box">
+          <div class="exemplo-label">Exemplo — Antes e Depois</div>
+          <div class="exemplo-content">
+            <p><em>Versão fraca:</em> "Trabalho lindo de hoje! Extensão de cílios volume russo. Agende pelo link."</p>
+            <br>
+            <p><em>Versão magnética:</em> "Ela chegou me dizendo que se sentia invisível nas fotos. Saiu diferente. Não foi só pelos cílios — foi porque ela se viu de outro jeito. É isso que eu faço aqui: volume russo feito com cuidado, técnica e escuta. Agende pelo link na bio."</p>
+          </div>
+        </div>
+
+        <div class="destaque">
+          <p>Percebe a diferença? A segunda versão conta uma história, cria identificação e mostra que você vai além da técnica. <strong>Isso é o que faz uma cliente escolher você e não a profissional com o mesmo preço na cidade.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: STORIES -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">4</div>
+        <div class="aula-info"><h3>Como Usar Stories para Atrair Clientes</h3><p>A ferramenta de conexão mais poderosa do Instagram</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Os Stories são onde sua personalidade vive. São mais informais, mais rápidos e mais pessoais que os posts. E por isso, <strong>criam mais conexão</strong>. Uma cliente que assiste seus stories todos os dias já sente que te conhece — mesmo sem nunca ter falado com você.</p>
+
+        <div class="lista-aula">
+          <li><strong>Bastidores do seu dia:</strong> Mostre sua preparação, o ambiente do atendimento, os produtos que usa. Pessoas adoram ver "por trás das câmeras".</li>
+          <li><strong>Perguntas e caixinhas:</strong> Use as ferramentas de interação do Instagram. "Me manda sua maior dúvida sobre [serviço]". Isso aumenta engajamento e ainda te dá conteúdo para posts futuros.</li>
+          <li><strong>Depoimentos em tempo real:</strong> Quando a cliente sair do atendimento radiante, peça um story rápido antes dela ir. Autêntico e poderoso.</li>
+          <li><strong>Sua rotina e valores:</strong> O que você lê, o que te inspira, como você cuida de si mesma. Isso humaniza sua marca e atrai clientes que se identificam com você.</li>
+          <li><strong>Stories de venda natural:</strong> "Abriu uma vaguinha na quinta às 14h. Quem quiser, manda mensagem." Simples, direto, sem pressão.</li>
+        </div>
+
+        <div class="atencao">
+          <span class="atencao-ico">💡</span>
+          <p><strong>Lembre-se:</strong> Você não precisa aparecer em todos os stories. Mas quanto mais você aparece, mais rápido a conexão se forma. A cliente quer conhecer a pessoa por trás do trabalho. Dê esse presente a ela.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="dv"><div class="dl"></div><div class="dd"></div><div class="dr"></div></div>
+
+<!-- ══════════ MÓDULO: WHATSAPP ══════════ -->
+<section id="whatsapp" style="background:var(--branco);">
+  <div class="si">
+    <div class="mod-header reveal">
+      <p class="mod-numero">Módulo 02</p>
+      <h2 class="mod-titulo">WhatsApp — O Elo que <em>Ninguém Cuida</em></h2>
+      <p class="mod-intro">De nada adianta um Instagram impecável se o primeiro contato da sua cliente for frustrante. O WhatsApp é onde você ganha ou perde a cliente — e a maioria das profissionais perde aqui sem perceber.</p>
+    </div>
+
+    <!-- AULA: POR QUE O WHATS É DECISIVO -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">1</div>
+        <div class="aula-info"><h3>Por Que o WhatsApp é a Etapa Mais Importante</h3><p>A verdade que ninguém te conta sobre conversão</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Pense em uma situação que provavelmente já aconteceu com você: você viu um produto lindo no Instagram, ficou com vontade, mandou mensagem — e a resposta demorou horas, foi fria, ou só dizia "Oi! Qual o interesse?" sem personalidade nenhuma.</p>
+        <p class="aula-texto">O que você fez? Provavelmente desistiu. Ou pelo menos ficou com uma sensação ruim. <strong>Sua cliente faz exatamente o mesmo.</strong></p>
+
+        <div class="destaque">
+          <p><strong>A realidade:</strong> Sua cliente passou tempo no seu Instagram. Ela gostou do que viu. Ela venceu a preguiça e mandou mensagem. Isso já é um grande passo. Agora, sua resposta vai confirmar ou destruir a percepção de valor que você construiu online.</p>
+        </div>
+
+        <p class="aula-texto">Uma resposta demorada comunica: "você não é prioridade". Uma resposta fria e genérica comunica: "você é uma de muitas". Uma resposta calorosa, rápida e personalizada comunica: <em>"eu te vi, eu me importo, você está em boas mãos"</em>.</p>
+
+        <div class="reflexao">
+          <h4>Seja honesta consigo mesma</h4>
+          <p>"Como está sendo a experiência de quem te manda mensagem hoje? Se você fosse a cliente, se sentiria especial — ou mais um número na fila?"</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: PRIMEIRO CONTATO -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">2</div>
+        <div class="aula-info"><h3>Como Responder o Primeiro Contato</h3><p>O momento que define tudo que vem depois</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">O primeiro contato é sagrado. É o momento de maior entusiasmo da cliente — ela acabou de decidir que quer entrar em contato com você. Não desperdice esse momento com uma resposta automática sem alma.</p>
+
+        <div class="passo-a-passo">
+          <div class="passo">
+            <div class="passo-n gold">1</div>
+            <div class="passo-corpo">
+              <h4 class="gold">Responda com acolhimento</h4>
+              <p>Comece pelo nome dela se souber, dê boas-vindas de verdade. <em>"Oi, Mariana! Que bom que você entrou em contato, fico feliz!"</em> — simples, mas faz ela sentir que você a notou de verdade.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n gold">2</div>
+            <div class="passo-corpo">
+              <h4 class="gold">Entenda o que ela quer antes de falar de preço</h4>
+              <p>Não vomite tabela de preços na primeira mensagem. Pergunte o que ela está buscando, se é a primeira vez, o que ela espera. Isso mostra cuidado e ainda te dá informação para personalizar o atendimento.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n gold">3</div>
+            <div class="passo-corpo">
+              <h4 class="gold">Apresente o valor antes do preço</h4>
+              <p>Quando for falar de preço, contextualize. <em>"O procedimento inclui X, Y e Z, dura em torno de duas horas e o resultado fica [tempo]. O valor é R$X."</em> Ela precisa entender o que está pagando antes de ver o número.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n gold">4</div>
+            <div class="passo-corpo">
+              <h4 class="gold">Conduza para o agendamento</h4>
+              <p>Não espere ela perguntar se tem horário. Ofereça: <em>"Tenho disponibilidade na terça de manhã ou na quinta à tarde. Qual funciona melhor para você?"</em> Dê opções, não perguntas abertas.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="exemplo-box">
+          <div class="exemplo-label">Como não responder</div>
+          <div class="exemplo-content">
+            <p>"Oi! Qual serviço você tem interesse?" — Fria, genérica, sem personalidade. Parece resposta automática.</p>
+          </div>
+        </div>
+        <div class="exemplo-box">
+          <div class="exemplo-label">Como responder com magnetismo</div>
+          <div class="exemplo-content">
+            <p><em>"Oi! Que bom te ver por aqui! Me conta — o que você está buscando? É sua primeira vez fazendo esse procedimento? Quero entender o que vai ser perfeito para você."</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: CUIDADO COM SCRIPTS -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">3</div>
+        <div class="aula-info"><h3>O Perigo dos Scripts Prontos — Sinta a Cliente</h3><p>Por que copiar fórmulas pode te custar clientes</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Scripts de atendimento existem no mercado aos montes. E muitas profissionais copiam e colam sem pensar. O problema? Sua cliente sente quando está sendo tratada por um robô.</p>
+
+        <div class="destaque-marrom">
+          <p><strong>A verdade sobre scripts:</strong> Eles podem ser um ponto de partida, nunca um destino. Use-os como referência para entender a estrutura de uma boa conversa. Mas a linguagem, o tom e o ritmo precisam ser os seus — adaptados para cada cliente.</p>
+        </div>
+
+        <p class="aula-texto">Cada cliente é única. Uma cliente de 50 anos que quer um procedimento pela primeira vez precisa de uma abordagem completamente diferente de uma cliente de 25 que já faz há anos. <strong>Sentir a cliente é uma habilidade, e você pode desenvolver.</strong></p>
+
+        <div class="lista-aula">
+          <li><strong>Observe o vocabulário dela:</strong> Ela usa linguagem formal ou informal? Manda áudio ou texto? Usa emojis? Espelhe o estilo dela. Isso cria rapport imediato.</li>
+          <li><strong>Leia o contexto:</strong> Ela mencionou uma ocasião especial? Um evento? Está insegura? Esses detalhes dizem como você deve se posicionar.</li>
+          <li><strong>Nunca seja apressada:</strong> Dar uma resposta rápida é ótimo. Dar uma resposta precipitada é péssimo. Leia a mensagem completa antes de responder.</li>
+          <li><strong>Valide antes de vender:</strong> Se ela expressou uma dúvida ou insegurança, valide antes de tentar converter. <em>"Entendo totalmente, é normal ter essa dúvida"</em> vale mais do que dez argumentos de venda.</li>
+        </div>
+
+        <div class="reflexao">
+          <h4>Lembre sempre</h4>
+          <p>"Você não está vendendo um serviço. Você está convidando uma mulher a confiar em você. Esse convite precisa ser personalizado."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: CONVERTER SEM DESESPERO -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">4</div>
+        <div class="aula-info"><h3>Converter sem Parecer Desesperada</h3><p>Psicologia do consumo, escassez e o poder do silêncio estratégico</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Existe uma linha tênue entre ser proativa e parecer desesperada. Quando você cruza essa linha, o efeito é contrário: a cliente se afasta, mesmo que tenha interesse.</p>
+
+        <div class="destaque">
+          <p><strong>O paradoxo da venda na beleza:</strong> Quanto menos você precisa de uma cliente específica, mais atraente você se torna para ela. Isso não significa ser fria — significa ter abundância de postura, mesmo nos momentos difíceis.</p>
+        </div>
+
+        <p class="aula-texto"><strong>Sobre escassez real:</strong> A escassez funciona quando é verdadeira. Se você realmente tem poucos horários disponíveis, diga. <em>"Só tenho duas vagas essa semana"</em> dito com honestidade é poderoso. Dito como técnica falsa, a cliente percebe — e desconfia de tudo mais que você disser.</p>
+
+        <div class="passo-a-passo">
+          <div class="passo">
+            <div class="passo-n">1</div>
+            <div class="passo-corpo">
+              <h4>O follow-up elegante</h4>
+              <p>Se a cliente não respondeu em 24-48h, você pode mandar uma mensagem. Uma só. <em>"Oi, só passando para saber se ficou alguma dúvida!"</em> Simplesmente. Se ela não responder, respeite. Não mande três seguidas — isso afasta.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">2</div>
+            <div class="passo-corpo">
+              <h4>O poder de dizer não</h4>
+              <p>Às vezes uma cliente pede algo que não combina com ela, que pode prejudicá-la ou que está fora da sua especialidade. Ter a coragem de dizer <em>"não é o que eu recomendo para você"</em> gera mais confiança do que aceitar qualquer coisa.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n">3</div>
+            <div class="passo-corpo">
+              <h4>Psicologia do consumo — o que realmente decide</h4>
+              <p>Estudos mostram que as pessoas tomam decisões de compra emocionalmente e as justificam racionalmente depois. Por isso, sua cliente não está escolhendo entre preços — ela está escolhendo como quer se <strong>sentir</strong>. Venda a sensação, não o serviço.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="atencao">
+          <span class="atencao-ico">🎯</span>
+          <p><strong>Técnica prática:</strong> Em vez de "Meu valor é R$150", experimente: <em>"O procedimento completo, com X e Y incluídos, fica por R$150 — e o resultado dura até [tempo]."</em> O mesmo preço, com contexto de valor, gera uma percepção completamente diferente.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="dv"><div class="dl"></div><div class="dd"></div><div class="dr"></div></div>
+
+<!-- ══════════ MÓDULO: PRESENCIAL ══════════ -->
+<section id="presencial" style="background:var(--bege);">
+  <div class="si">
+    <div class="mod-header reveal">
+      <p class="mod-numero">Módulo 03</p>
+      <h2 class="mod-titulo">Presencial — <em>Encantar é uma Escolha</em></h2>
+      <p class="mod-intro">Não adianta servir cappuccino e ter um studio lindo se o atendimento não for humanizado. A experiência que sua cliente leva para casa não é o serviço — é como ela se sentiu sendo cuidada por você.</p>
+    </div>
+
+    <!-- AULA: HUMANIZAÇÃO -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">1</div>
+        <div class="aula-info"><h3>Atendimento Humanizado — O que Realmente Fideliza</h3><p>Por que o cappuccino não é o suficiente</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Muitas profissionais investem em ambiente bonito, em cafezinho especial, em música ambiente. E tudo isso é ótimo — mas é o mínimo. O que faz uma cliente <strong>não conseguir ir em outra profissional</strong> é o vínculo humano que ela criou com você.</p>
+
+        <div class="destaque-marrom">
+          <p><strong>Reflita:</strong> Você já teve uma cabeleireira, dermatologista ou profissional qualquer que você não trocaria por nada — mesmo que encontrasse alguém mais barato? Provavelmente sim. Agora pense: o que ela tinha de especial? Quase certamente era a forma como ela te fazia se sentir.</p>
+        </div>
+
+        <p class="aula-texto">Humanizar o atendimento não é ser a melhor amiga de cada cliente. É simplesmente <strong>tratar cada pessoa como única</strong> — com atenção genuína, respeito ao tempo dela e interesse real no que ela está vivendo.</p>
+
+        <div class="lista-aula">
+          <li><strong>Olho no olho na recepção:</strong> Quando ela chegar, pare o que estiver fazendo. Olhe para ela. Sorria. Esse gesto de segundos vale mais do que qualquer decoração.</li>
+          <li><strong>Lembre de detalhes:</strong> Ela tinha uma viagem na última consulta? Pergunte como foi. Ela mencionou que estava nervosa? Pergunte se está melhor. Isso diz que ela importa além do serviço.</li>
+          <li><strong>Nada de celular durante o atendimento:</strong> Sua atenção dividida ela percebe. E ela se sente número. Você pode ter a agenda mais cheia da cidade — mas ela não pode sentir isso durante o atendimento dela.</li>
+          <li><strong>Respeite o silêncio quando ela precisar:</strong> Nem toda cliente quer conversar. Algumas vêm para descansar. Leia os sinais e adapte. Respeitar esse limite também é humanizar.</li>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: ESCUTA ATIVA -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">2</div>
+        <div class="aula-info"><h3>Escuta Ativa e Respeito às Limitações</h3><p>A arte de realmente ouvir — e o que fazer com o que você escuta</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Escuta ativa não é esperar a sua vez de falar. É prestar atenção de verdade no que a cliente está dizendo — nas palavras, mas também no tom, na hesitação, no que ela não está dizendo explicitamente.</p>
+
+        <div class="passo-a-passo">
+          <div class="passo">
+            <div class="passo-n brown">1</div>
+            <div class="passo-corpo">
+              <h4 class="brown">Faça perguntas abertas na anamnese</h4>
+              <p>Em vez de "Você quer X ou Y?", pergunte: <em>"O que você está buscando com esse procedimento hoje?"</em> Respostas abertas revelam expectativas, inseguranças e o que vai fazer ela sair satisfeita.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n brown">2</div>
+            <div class="passo-corpo">
+              <h4 class="brown">Respeite e explique suas decisões técnicas</h4>
+              <p>Se você vai fazer diferente do que ela pediu — por razão técnica ou porque não seria bom para ela — explique. <em>"Eu poderia fazer assim, mas para o seu tipo de cílio isso prejudicaria. O que vai funcionar melhor para você é..."</em> Isso gera confiança, não decepção.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n brown">3</div>
+            <div class="passo-corpo">
+              <h4 class="brown">Valide as inseguranças dela</h4>
+              <p>Se ela chegar com medo ou vergonha de algo (cabelos danificados, sobrancelhas irregulares, pele sensível), acolha antes de agir. <em>"Eu entendo, muitas clientes chegam assim. Vamos cuidar disso juntas."</em></p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-n brown">4</div>
+            <div class="passo-corpo">
+              <h4 class="brown">Conclua pedindo feedback</h4>
+              <p>Antes de ela ir embora: <em>"O que você achou? Ficou do jeito que você esperava?"</em> Isso abre espaço para ajustes, mostra que você se importa com a satisfação dela e ainda te dá informação valiosa.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="atencao">
+          <span class="atencao-ico">🤍</span>
+          <p><strong>Lembre-se:</strong> Muitas clientes chegam ao seu espaço carregando um dia difícil, uma insegurança antiga ou uma expectativa enorme. O que você faz com isso — a forma como você as recebe — pode ser uma das melhores partes do dia delas. <strong>Isso é poder. Use com cuidado e com amor.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AULA: ENCANTAR -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">3</div>
+        <div class="aula-info"><h3>Como Encantar Durante o Serviço</h3><p>Os detalhes que transformam bom em inesquecível</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Encantar não significa fazer algo grandioso. Significa fazer o esperado com excelência — e adicionar um detalhe que ela não esperava. Pode ser algo pequeníssimo. Mas <strong>o inesperado é o que fica na memória.</strong></p>
+
+        <div class="dois-cols">
+          <div class="col-card brown">
+            <h4>Pequenos gestos de encantamento</h4>
+            <p>Um chá oferecido no momento certo. Uma manta quando estiver frio. Uma música que ela mencionou gostar. Lembrar o nome do filho que ela mencionou na última visita.</p>
+          </div>
+          <div class="col-card brown">
+            <h4>O toque final que transforma</h4>
+            <p>Mostre o resultado com entusiasmo genuíno. Dê um espelho. Explique o que fez. Oriente os cuidados. Ela saiu com conhecimento — e isso tem valor.</p>
+          </div>
+        </div>
+
+        <div class="destaque">
+          <p><strong>A regra do encantamento:</strong> Faça ela sair do seu espaço sentindo-se mais bonita, mais cuidada e mais especial do que quando entrou. Não só pelo resultado visual — pelo como ela foi tratada durante todo o processo.</p>
+        </div>
+
+        <div class="quote-aula">"Técnica traz a cliente. Experiência a faz voltar. Encantamento a faz trazer as amigas."</div>
+      </div>
+    </div>
+
+    <!-- AULA: FIDELIZAR -->
+    <div class="aula reveal">
+      <div class="aula-head" onclick="toggleAula(this)">
+        <div class="aula-num">4</div>
+        <div class="aula-info"><h3>Fidelizar e Pedir Indicação com Elegância</h3><p>Como transformar uma cliente em fã — e fã em marketing</p></div>
+        <span class="aula-seta">▼</span>
+      </div>
+      <div class="aula-corpo">
+        <p class="aula-texto">Fidelização não acontece depois do atendimento — ela é construída durante. Cada escolha que você faz durante o atendimento está, ou não, plantando a semente do retorno.</p>
+
+        <div class="lista-aula">
+          <li><strong>Já agende o próximo atendimento antes dela sair:</strong> <em>"Quando você vai precisar fazer a manutenção? Vou reservar seu horário agora."</em> Natural, prático e garante a volta.</li>
+          <li><strong>Mande mensagem de acompanhamento:</strong> 24-48h depois, pergunte como ela está se sentindo com o resultado. Além de ser um gesto bonito, mostra compromisso com a satisfação dela.</li>
+          <li><strong>Peça indicação no momento certo:</strong> Quando ela estiver claramente satisfeita — olhando no espelho, sorrindo — diga: <em>"Fico muito feliz que tenha gostado! Se você conhece alguém que se beneficiaria disso, fico feliz em receber pela sua indicação."</em> Simples, direto, sem constrangimento.</li>
+          <li><strong>Crie um programa de indicação simples:</strong> Não precisa ser complexo. Um desconto para a próxima visita quando a amiga agendar já é suficiente para criar um ciclo de indicações orgânicas.</li>
+        </div>
+
+        <div class="reflexao">
+          <h4>A mentalidade certa</h4>
+          <p>"Indicação não é favorzinho que você pede. É o reconhecimento natural de um trabalho extraordinário. Quando você encanta, a indicação vem espontânea. O que você está fazendo para merecer essa indicação hoje?"</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="dv"><div class="dl"></div><div class="dd"></div><div class="dr"></div></div>
+
+<!-- ══════════ CONCLUSÃO ══════════ -->
+<section id="conclusao" style="background:var(--branco);">
+  <div class="si">
+    <div class="conc-inner" style="max-width:800px;margin:0 auto;text-align:center;">
+      <p class="mod-numero reveal" style="text-align:center;">Fechando o Ciclo</p>
+      <h2 class="conc-titulo reveal">Você agora tem o <em>mapa</em><br>— use com intenção</h2>
+
+      <p class="reveal" style="font-size:0.9rem;font-weight:300;line-height:2.1;color:var(--texto-suave);margin-bottom:1.2rem;">Você chegou até aqui. Isso já diz muito sobre quem você é como profissional — alguém que busca evoluir, que quer mais, que sabe que o detalhe faz diferença.</p>
+
+      <p class="reveal" style="font-size:0.9rem;font-weight:300;line-height:2.1;color:var(--texto-suave);margin-bottom:1.2rem;">O Funil Magnético DNA Beauter não é uma fórmula que você aplica mecanicamente. É uma forma de pensar sobre cada ponto de contato com a sua cliente — com cuidado, com estratégia e com humanidade.</p>
+
+      <p class="reveal" style="font-size:0.9rem;font-weight:300;line-height:2.1;color:var(--texto-suave);margin-bottom:2rem;"><strong>Instagram</strong> para atrair com intenção. <strong>WhatsApp</strong> para converter com conexão. <strong>Presencial</strong> para encantar com excelência. Os três precisam de você — presente, intencional e autêntica.</p>
+
+      <div class="conc-pilares reveal">
+        <div class="conc-pilar"><span class="ico">📱</span><span>Atrair</span></div>
+        <div class="conc-pilar"><span class="ico">💬</span><span>Converter</span></div>
+        <div class="conc-pilar"><span class="ico">✨</span><span>Encantar</span></div>
+        <div class="conc-pilar"><span class="ico">💎</span><span>Fidelizar</span></div>
+        <div class="conc-pilar"><span class="ico">🔄</span><span>Reiniciar</span></div>
+      </div>
+
+      <div class="reveal" style="text-align:left;margin-top:2.5rem;background:var(--marrom);padding:2rem 2.2rem;">
+        <h4 style="font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--dourado-brilho);margin-bottom:0.8rem;">Sua missão agora</h4>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2vw,1.35rem);font-style:italic;font-weight:300;line-height:1.8;color:#fdf8f3;">"Escolha uma coisa — só uma — de cada módulo para aplicar esta semana. Não tente mudar tudo de uma vez. A consistência de pequenas ações gera transformações grandes."</p>
+      </div>
+
+      <p class="frase-final reveal">"A cliente que encontra você no Instagram, confia no WhatsApp e se encanta no presencial — não vai embora. Ela vira fã."</p>
+      <p class="autor-final reveal">Método Funil Magnético — DNA Beauter</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;font-weight:300;color:var(--rose);margin-top:1.5rem;letter-spacing:0.05em;" class="reveal">com carinho, Angela Moraes 🤍</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="fb">DNA Beauter</p>
+  <p>Funil Magnético — As Aulas &nbsp;·&nbsp; Todos os direitos reservados</p>
+</footer>
+
+<script>
+/* PROGRESS */
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  document.getElementById('progress').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+},{passive:true});
+
+/* FUNIL */
+function toggleFunil(id){
+  document.querySelectorAll('.f-detail').forEach(el=>{
+    el.id===id?el.classList.toggle('open'):el.classList.remove('open');
+  });
+}
+
+/* AULAS ACCORDION */
+function toggleAula(head){
+  const corpo=head.nextElementSibling;
+  const aberta=head.classList.contains('aberta');
+  // fecha todas do mesmo módulo
+  head.closest('section').querySelectorAll('.aula-head').forEach(h=>{
+    h.classList.remove('aberta');
+    h.nextElementSibling.classList.remove('aberta');
+  });
+  if(!aberta){head.classList.add('aberta');corpo.classList.add('aberta');}
+}
+
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible');});
+},{threshold:0.06});
+document.querySelectorAll('.reveal, .f-layer').forEach(el=>obs.observe(el));
+
+/* NAV ACTIVE */
+const secs=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-140) cur=s.id;});
+  document.querySelectorAll('nav a').forEach(a=>{
+    a.classList.remove('active');
+    if(a.getAttribute('href')==='#'+cur) a.classList.add('active');
+  });
+},{passive:true});
+</script>
+</body>
+</html>
